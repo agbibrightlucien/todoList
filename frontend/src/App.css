@@ -835,6 +835,103 @@ body {
   transform: translate(-50%, -50%);
 }
 
+/* Subtask Styles */
+.subtasks-container {
+  border-top: 1px solid var(--gray-100);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+}
+
+.subtask-progress {
+  margin-bottom: var(--space-4);
+}
+
+.progress-bar {
+  background-color: var(--gray-200);
+  border-radius: var(--radius-full);
+  height: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: var(--radius-full);
+}
+
+.subtask-item {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  transition: all 0.2s ease;
+  animation: slideDown 0.3s ease-out;
+}
+
+.subtask-item:hover {
+  border-color: var(--gray-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.subtask-item.completed {
+  background-color: var(--success-50);
+  border-color: var(--success-200);
+}
+
+.bulk-actions {
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  animation: slideDown 0.3s ease-out;
+}
+
+.bulk-actions .btn {
+  font-size: 0.75rem;
+  padding: var(--space-1) var(--space-3);
+}
+
+.add-subtask .btn {
+  border: 2px dashed var(--gray-300);
+  background: var(--gray-50);
+  color: var(--gray-600);
+  transition: all 0.2s ease;
+}
+
+.add-subtask .btn:hover {
+  border-color: var(--gray-400);
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+/* Subtask Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subtasks-list {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Header Styles */
 .header-nav {
   background: rgba(255, 255, 255, 0.95);

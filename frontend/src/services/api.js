@@ -100,6 +100,66 @@ export const todoAPI = {
       throw error;
     }
   },
+
+  // SUBTASK OPERATIONS
+
+  // Add a subtask to a todo
+  addSubtask: async (todoId, title) => {
+    try {
+      const response = await api.post(`/todos/${todoId}/subtasks`, { title });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding subtask:', error);
+      throw error;
+    }
+  },
+
+  // Toggle subtask completion
+  toggleSubtask: async (todoId, subtaskId) => {
+    try {
+      const response = await api.patch(`/todos/${todoId}/subtasks/${subtaskId}/toggle`);
+      return response.data;
+    } catch (error) {
+      console.error('Error toggling subtask:', error);
+      throw error;
+    }
+  },
+
+  // Update subtask title
+  updateSubtask: async (todoId, subtaskId, title) => {
+    try {
+      const response = await api.put(`/todos/${todoId}/subtasks/${subtaskId}`, { title });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating subtask:', error);
+      throw error;
+    }
+  },
+
+  // Delete a subtask
+  deleteSubtask: async (todoId, subtaskId) => {
+    try {
+      const response = await api.delete(`/todos/${todoId}/subtasks/${subtaskId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting subtask:', error);
+      throw error;
+    }
+  },
+
+  // Bulk operations on subtasks
+  bulkUpdateSubtasks: async (todoId, action, subtaskIds) => {
+    try {
+      const response = await api.patch(`/todos/${todoId}/subtasks/bulk`, {
+        action,
+        subtaskIds
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error bulk updating subtasks:', error);
+      throw error;
+    }
+  },
 };
 
 export const authAPI = {

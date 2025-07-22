@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, CheckCircle, Circle, AlertTriangle, Edit, Trash2, Calendar, Target, TrendingUp, Clock, Tag } from 'lucide-react';
 import { todoAPI } from '../services/api';
+import Subtasks from './Subtasks';
 
 function TodoApp() {
   const [todos, setTodos] = useState([]);
@@ -11,6 +12,7 @@ function TodoApp() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [expandedTodos, setExpandedTodos] = useState(new Set());
 
   // Categories configuration
   const categories = [
@@ -146,6 +148,22 @@ function TodoApp() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const toggleTodoExpansion = (todoId) => {
+    const newExpanded = new Set(expandedTodos);
+    if (newExpanded.has(todoId)) {
+      newExpanded.delete(todoId);
+    } else {
+      newExpanded.add(todoId);
+    }
+    setExpandedTodos(newExpanded);
+  };
+
+  const handleTodoUpdate = (updatedTodo) => {
+    setTodos(prev => prev.map(todo => 
+      todo._id === updatedTodo._id ? updatedTodo : todo
+    ));
   };
 
   // Filter todos
@@ -393,6 +411,24 @@ function TodoApp() {
                     </div>
                     
                     <div className="flex items-center gap-2">
+                      {/* Expand/Collapse Button - Always show */}
+                      <button
+                        onClick={() => toggleTodoExpansion(todo._id)}
+                        className="btn btn-ghost btn-icon"
+                        title={expandedTodos.has(todo._id) ? 'Collapse subtasks' : 'Expand subtasks'}
+                      >
+                        <span className={`transform transition-transform ${
+                          expandedTodos.has(todo._id) ? 'rotate-180' : ''
+                        }`}>
+                          ⌄
+                        </span>
+                        {todo.subtasks && todo.subtasks.length > 0 && (
+                          <span className="ml-1 text-xs">
+                            {todo.subtaskProgress?.completed || 0}/{todo.subtasks.length}
+                          </span>
+                        )}
+                      </button>
+                      
                       <button
                         onClick={() => handleEditClick(todo)}
                         className="btn btn-ghost btn-icon"
@@ -409,6 +445,13 @@ function TodoApp() {
                       </button>
                     </div>
                   </div>
+                  
+                  {/* Subtasks Component */}
+                  <Subtasks 
+                    todo={todo}
+                    onTodoUpdate={handleTodoUpdate}
+                    isExpanded={expandedTodos.has(todo._id)}
+                  />
                 </div>
               </div>
             ))
