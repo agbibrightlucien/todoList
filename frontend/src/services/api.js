@@ -9,6 +9,32 @@ const api = axios.create({
   },
 });
 
+// Add token to requests if it exists
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle token expiration
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const todoAPI = {
   // Get all todos
   getTodos: async () => {
@@ -71,6 +97,63 @@ export const todoAPI = {
       return response.data;
     } catch (error) {
       console.error('Error toggling todo:', error);
+      throw error;
+    }
+  },
+};
+
+export const authAPI = {
+  // Register a new user
+  register: async (userData) => {
+    try {
+      const response = await api.post('/auth/register', userData);
+      return response.data;
+    } catch (error) {
+      console.error('Error registering user:', error);
+      throw error;
+    }
+  },
+
+  // Login user
+  login: async (credentials) => {
+    try {
+      const response = await api.post('/auth/login', credentials);
+      return response.data;
+    } catch (error) {
+      console.error('Error logging in:', error);
+      throw error;
+    }
+  },
+
+  // Get current user info
+  getMe: async () => {
+    try {
+      const response = await api.get('/auth/me');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      throw error;
+    }
+  },
+
+  // Forgot password
+  forgotPassword: async (email) => {
+    try {
+      const response = await api.post('/auth/forgot-password', { email });
+      return response.data;
+    } catch (error) {
+      console.error('Error requesting password reset:', error);
+      throw error;
+    }
+  },
+
+  // Reset password
+  resetPassword: async (token, password) => {
+    try {
+      const response = await api.put(`/auth/reset-password/${token}`, { password });
+      return response.data;
+    } catch (error) {
+      console.error('Error resetting password:', error);
       throw error;
     }
   },

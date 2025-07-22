@@ -11,15 +11,20 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch((error) => console.error('MongoDB connection error:', error));
+.then(() => console.log('✅ Connected to MongoDB Atlas'))
+.catch((error) => {
+  console.error('❌ MongoDB connection error:', error.message);
+  console.log('🔍 Check your internet connection and MongoDB Atlas credentials');
+});
 
 // Routes
 const todoRoutes = require('./routes/todos');
+const authRoutes = require('./routes/auth');
 app.use('/api/todos', todoRoutes);
+app.use('/api/auth', authRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
