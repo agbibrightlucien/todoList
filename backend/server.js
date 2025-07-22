@@ -22,7 +22,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Routes
 const todoRoutes = require('./routes/todos');
+const authRoutes = require('./routes/auth');
 app.use('/api/todos', todoRoutes);
+app.use('/api/auth', authRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
