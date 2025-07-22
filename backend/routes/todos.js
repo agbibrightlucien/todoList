@@ -1,13 +1,22 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Todo = require('../models/Todo');
 
 // GET all todos
 router.get('/', async (req, res) => {
   try {
+    // Check if mongoose is connected
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ 
+        message: 'Database not connected. Please check MongoDB connection.' 
+      });
+    }
+    
     const todos = await Todo.find().sort({ createdAt: -1 });
     res.json(todos);
   } catch (error) {
+    console.error('Error fetching todos:', error);
     res.status(500).json({ message: error.message });
   }
 });
