@@ -11,10 +11,10 @@ const AppContent = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="loading-spinner spinner-lg mx-auto mb-4 text-primary-500"></div>
+          <p className="text-gray-600 font-medium">Initializing TodoFlow...</p>
         </div>
       </div>
     );
@@ -25,7 +25,7 @@ const AppContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="app-layout">
       <Header />
       <TodoApp />
     </div>
