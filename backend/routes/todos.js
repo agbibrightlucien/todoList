@@ -42,6 +42,7 @@ router.post('/', auth, async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       priority: req.body.priority,
+      category: req.body.category,
       dueDate: req.body.dueDate,
       user: req.user._id
     });
@@ -66,6 +67,7 @@ router.put('/:id', auth, async (req, res) => {
     if (req.body.description !== undefined) todo.description = req.body.description;
     if (req.body.completed !== undefined) todo.completed = req.body.completed;
     if (req.body.priority !== undefined) todo.priority = req.body.priority;
+    if (req.body.category !== undefined) todo.category = req.body.category;
     if (req.body.dueDate !== undefined) todo.dueDate = req.body.dueDate;
 
     const updatedTodo = await todo.save();
