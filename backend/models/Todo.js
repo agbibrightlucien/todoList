@@ -23,6 +23,11 @@ const todoSchema = new mongoose.Schema({
   dueDate: {
     type: Date
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
