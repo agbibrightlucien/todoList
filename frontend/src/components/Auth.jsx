@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Palette } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -130,8 +132,25 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="auth-form container-sm animate-fade-in">
+    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleDarkMode}
+        className="fixed top-4 right-4 btn btn-ghost btn-icon z-50"
+        title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}
+        style={{ 
+          background: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          color: isDarkMode ? '#fff' : '#000'
+        }}
+      >
+        {isDarkMode ? '☀️' : '🌙'}
+      </button>
+      
+      <div className="auth-form container-sm animate-fade-in"
+        style={{
+          background: isDarkMode ? 'rgba(30, 41, 59, 0.8)' : undefined
+        }}
+      >
         <div className="auth-form-header">
           <div className="mb-4">
             <div className="w-16 h-16 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mx-auto mb-4">

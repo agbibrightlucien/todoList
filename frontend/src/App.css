@@ -1,8 +1,18 @@
-/* Modern Design System for Todo App */
+/* Modern Design System for Todo App with Theme Support */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette */
+  /* Dynamic Color Variables (controlled by theme) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Color Palette - Dynamic (will be overridden by theme) */
   --primary-50: #f0f9ff;
   --primary-100: #e0f2fe;
   --primary-200: #bae6fd;
@@ -14,6 +24,7 @@
   --primary-800: #075985;
   --primary-900: #0c4a6e;
 
+  /* Static Colors */
   --gray-50: #f8fafc;
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
@@ -79,10 +90,39 @@ body {
   font-feature-settings: 'rlig' 1, 'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-50) 100%);
+  background: var(--bg-primary);
   min-height: 100vh;
-  color: var(--gray-900);
+  color: var(--text-primary);
   line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme-aware background gradient */
+[data-theme="light"] body {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-50) 100%);
+}
+
+[data-theme="dark"] body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+}
+
+/* Force dark mode styles */
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] * {
+  border-color: #334155 !important;
+}
+
+[data-theme="dark"] .card {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .auth-form {
+  background: rgba(30, 41, 59, 0.9) !important;
+  color: #f8fafc !important;
 }
 
 /* Layout System */
@@ -112,29 +152,29 @@ body {
 
 /* Card Components */
 .card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--gray-200);
+  box-shadow: 0 4px 6px -1px var(--shadow-color);
+  border: 1px solid var(--border-color);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: var(--gray-300);
+  box-shadow: 0 10px 15px -3px var(--shadow-color);
+  border-color: var(--primary-300);
   transform: translateY(-2px);
 }
 
 .card-elevated {
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 20px 25px -5px var(--shadow-color);
   border: none;
 }
 
 .card-header {
   padding: var(--space-6);
-  border-bottom: 1px solid var(--gray-200);
-  background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-50) 100%);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
 .card-content {
@@ -1067,6 +1107,160 @@ body {
     padding: var(--space-3) var(--space-6);
     font-size: 0.875rem;
   }
+}
+
+/* Theme-specific Styles */
+.theme-settings-modal {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.theme-section {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.theme-toggle {
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  background: var(--gray-300);
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-toggle.active {
+  background: var(--primary-500);
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  color: var(--gray-600);
+}
+
+.theme-toggle.active .theme-toggle-thumb {
+  transform: translateX(1.5rem);
+  color: var(--primary-600);
+}
+
+.theme-color-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-color-option:hover {
+  border-color: var(--primary-300);
+  transform: translateY(-2px);
+}
+
+.theme-color-option.active {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.theme-preview {
+  display: flex;
+  gap: 2px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  width: 40px;
+  height: 20px;
+}
+
+.theme-preview-primary,
+.theme-preview-secondary,
+.theme-preview-accent {
+  flex: 1;
+  height: 100%;
+}
+
+.theme-check {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  background: var(--primary-500);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: bold;
+}
+
+.theme-preview-card {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+/* Text color classes */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .auth-form {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .header-nav {
+  background: rgba(30, 41, 59, 0.95);
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .subtask-item {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .subtask-item:hover {
+  border-color: var(--primary-400);
+}
+
+[data-theme="dark"] .bulk-actions {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
 }
 
 /* Accessibility */
