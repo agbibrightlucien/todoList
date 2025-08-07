@@ -5,6 +5,8 @@ import { useAuth } from './hooks/useAuth';
 import Auth from './components/Auth';
 import Header from './components/Header';
 import TodoApp from './components/TodoApp';
+import { EnvironmentDisplay } from './components/EnvironmentDisplay';
+import { config } from './config/environment';
 import './App.css';
 
 const AppContent = () => {
@@ -15,20 +17,26 @@ const AppContent = () => {
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
         <div className="text-center animate-fade-in">
           <div className="loading-spinner spinner-lg mx-auto mb-4 text-primary-500"></div>
-          <p className="font-medium" style={{ color: 'var(--text-secondary)' }}>Initializing TodoFlow...</p>
+          <p className="font-medium" style={{ color: 'var(--text-secondary)' }}>Initializing {config.APP_NAME}...</p>
         </div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <Auth />;
+    return (
+      <>
+        <Auth />
+        <EnvironmentDisplay />
+      </>
+    );
   }
 
   return (
     <div className="app-layout">
       <Header />
       <TodoApp />
+      <EnvironmentDisplay />
     </div>
   );
 };
