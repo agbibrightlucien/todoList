@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { themes } from '../constants/themes';
 import { ThemeContext } from '../hooks/useTheme';
+import { config, logger, storage } from '../config/environment';
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState('blue');
+  const [currentTheme, setCurrentTheme] = useState(config.DEFAULT_THEME);
 
-  // Initialize theme from localStorage or system preference
+  // Initialize theme from storage or system preference
   useEffect(() => {
-    const savedTheme = localStorage.getItem('todoflow-theme');
-    const savedMode = localStorage.getItem('todoflow-dark-mode');
+    const savedTheme = storage.getItem('theme') || localStorage.getItem(config.THEME_STORAGE_KEY);
+    const savedMode = storage.getItem('dark_mode') || localStorage.getItem(config.DARK_MODE_STORAGE_KEY);
     
     if (savedTheme && themes[savedTheme]) {
       setCurrentTheme(savedTheme);
+      logger.debug('Loaded saved theme:', savedTheme);
+    } else {
+      setCurrentTheme(config.DEFAULT_THEME);
+      logger.debug('Using default theme:', config.DEFAULT_THEME);
     }
     
     if (savedMode !== null) {
       setIsDarkMode(savedMode === 'true');
+      logger.debug('Loaded saved dark mode preference:', savedMode);
     } else {
       // Detect system preference
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setIsDarkMode(systemPrefersDark);
+      logger.debug('Using system dark mode preference:', systemPrefersDark);
     }
   }, []);
 
@@ -30,9 +37,10 @@ export const ThemeProvider = ({ children }) => {
     
     const handleChange = (e) => {
       // Only auto-switch if user hasn't manually set a preference
-      const savedMode = localStorage.getItem('todoflow-dark-mode');
+      const savedMode = storage.getItem('dark_mode') || localStorage.getItem(config.DARK_MODE_STORAGE_KEY);
       if (savedMode === null) {
         setIsDarkMode(e.matches);
+        logger.debug('System theme changed, updating to:', e.matches ? 'dark' : 'light');
       }
     };
 
@@ -53,7 +61,7 @@ export const ThemeProvider = ({ children }) => {
 
     // Apply dark/light mode
     if (isDarkMode) {
-      console.log('Setting dark mode');
+      logger.debug('Setting dark mode');
       root.setAttribute('data-theme', 'dark');
       root.style.setProperty('--bg-primary', '#0f172a');
       root.style.setProperty('--bg-secondary', '#1e293b');
@@ -64,7 +72,7 @@ export const ThemeProvider = ({ children }) => {
       root.style.setProperty('--border-color', '#334155');
       root.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.5)');
     } else {
-      console.log('Setting light mode');
+      logger.debug('Setting light mode');
       root.setAttribute('data-theme', 'light');
       root.style.setProperty('--bg-primary', '#ffffff');
       root.style.setProperty('--bg-secondary', '#f8fafc');
@@ -76,20 +84,34 @@ export const ThemeProvider = ({ children }) => {
       root.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.1)');
     }
 
-    // Save preferences
-    localStorage.setItem('todoflow-theme', currentTheme);
-    localStorage.setItem('todoflow-dark-mode', isDarkMode.toString());
+    // Save preferences using both storage systems
+    storage.setItem('theme', currentTheme);
+    storage.setItem('dark_mode', isDarkMode.toString());
+    localStorage.setItem(config.THEME_STORAGE_KEY, currentTheme);
+    localStorage.setItem(config.DARK_MODE_STORAGE_KEY, isDarkMode.toString());
+    
+    logger.debug('Theme applied:', { isDarkMode, currentTheme });
   }, [isDarkMode, currentTheme]);
 
   const toggleDarkMode = () => {
-    console.log('Toggling dark mode from:', isDarkMode, 'to:', !isDarkMode);
+    logger.debug('Toggling dark mode from:', isDarkMode, 'to:', !isDarkMode);
     setIsDarkMode(prev => !prev);
   };
 
   const changeTheme = (themeId) => {
     if (themes[themeId]) {
+      logger.debug('Changing theme to:', themeId);
       setCurrentTheme(themeId);
+    } else {
+      logger.warn('Invalid theme ID:', themeId);
     }
+  };
+
+  // Theme-related utilities
+  const resetTheme = () => {
+    logger.debug('Resetting theme to default');
+    setCurrentTheme(config.DEFAULT_THEME);
+    setIsDarkMode(false);
   };
 
   const value = {
@@ -98,6 +120,11 @@ export const ThemeProvider = ({ children }) => {
     themes,
     toggleDarkMode,
     changeTheme,
+    resetTheme,
+    config: {
+      defaultTheme: config.DEFAULT_THEME,
+      enableThemes: config.FEATURES.THEMES
+    }
   };
 
   return (
