@@ -1,30 +1,49 @@
-# Todo List Backend
+# TodoFlow Backend API
 
-A simple Node.js Express API for managing todos with MongoDB.
+A robust Node.js Express API for managing todos with MongoDB, featuring authentication, email notifications, and comprehensive environment configuration.
 
-## Features
+## 🚀 Features
 
-- Create, read, update, and delete todos
-- Mark todos as completed/incomplete
-- Set priority levels (low, medium, high)
-- Set due dates
-- CORS enabled for frontend integration
+- ✅ Complete CRUD operations for todos
+- 🔐 JWT-based authentication system
+- 📧 Password reset via email
+- 🏷️ Priority levels and due dates
+- 📝 Subtasks and categories support
+- 🔒 Secure password hashing with bcrypt
+- 🌐 CORS enabled for frontend integration
+- ⚙️ Comprehensive environment configuration
+- 🛡️ Request validation and error handling
 
-## Prerequisites
+## 🔧 Prerequisites
 
 - Node.js (v14 or higher)
 - MongoDB (local installation or MongoDB Atlas)
+- SMTP email service (for password reset functionality)
 
-## Installation
+## 📦 Installation
 
-1. Install dependencies:
-```bash
-npm install
-```
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-2. Set up environment variables:
-   - Copy `.env` file and update the MongoDB connection string if needed
-   - Default: `mongodb://localhost:27017/todolist`
+2. **Configure environment variables:**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   # Edit the .env file with your configuration
+   ```
+   
+   **Required variables:**
+   - `JWT_SECRET` - JWT signing secret (minimum 32 characters)
+   - `MONGODB_URI` - MongoDB connection string
+   
+   See [ENV_CONFIG.md](./ENV_CONFIG.md) for complete configuration guide.
+
+3. **Validate your configuration:**
+   ```bash
+   npm run validate-env
+   ```
 
 3. Start MongoDB (if running locally):
 ```bash
