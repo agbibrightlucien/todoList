@@ -1,9 +1,9 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:5000/api';
+import { config, logger, storage } from '../config/environment';
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: config.API_BASE_URL,
+  timeout: config.API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -12,23 +12,35 @@ const api = axios.create({
 // Add token to requests if it exists
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = storage.getItem('token') || localStorage.getItem(config.TOKEN_STORAGE_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
+    logger.error('API Request Error:', error);
     return Promise.reject(error);
   }
 );
 
-// Handle token expiration
+// Handle token expiration and logging
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    logger.debug('API Response:', response.config.method?.toUpperCase(), response.config.url, response.status);
+    return response;
+  },
   (error) => {
+    logger.error('API Response Error:', error.response?.status, error.config?.url);
+    
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
+      // Clear all authentication data
+      storage.removeItem('token');
+      storage.removeItem('user');
+      localStorage.removeItem(config.TOKEN_STORAGE_KEY);
+      localStorage.removeItem(config.USER_STORAGE_KEY);
+      
+      // Redirect to login
       window.location.href = '/';
     }
     return Promise.reject(error);
