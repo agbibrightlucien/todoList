@@ -99,15 +99,26 @@ const storage = {
       const itemStr = localStorage.getItem(config.STORAGE_PREFIX + key);
       if (!itemStr) return null;
       
-      const item = JSON.parse(itemStr);
-      
-      // Check if item has expired
-      if (item.expiry && Date.now() > item.expiry) {
-        storage.removeItem(key);
-        return null;
+      // Try to parse as JSON
+      try {
+        const item = JSON.parse(itemStr);
+        
+        // If it's our structured format with value/expiry
+        if (typeof item === 'object' && item !== null && 'value' in item) {
+          // Check if item has expired
+          if (item.expiry && Date.now() > item.expiry) {
+            storage.removeItem(key);
+            return null;
+          }
+          return item.value;
+        }
+        
+        // If it's a valid JSON value but not our structure, return as-is
+        return item;
+      } catch {
+        // If JSON.parse fails, it might be a plain string, return as-is
+        return itemStr;
       }
-      
-      return item.value;
     } catch (error) {
       logger.error('Error getting localStorage item:', error);
       return null;
@@ -121,7 +132,33 @@ const storage = {
       logger.error('Error removing localStorage item:', error);
     }
   },
-  
+
+  // Utility to migrate old format values to new format
+  migrateItem: (key, ttlMinutes = null) => {
+    try {
+      const itemStr = localStorage.getItem(config.STORAGE_PREFIX + key);
+      if (!itemStr) return;
+
+      try {
+        const parsed = JSON.parse(itemStr);
+        // If it already has our structure, no migration needed
+        if (typeof parsed === 'object' && parsed !== null && 'value' in parsed) {
+          return;
+        }
+      } catch {
+        // If it's not valid JSON, treat as string
+      }
+
+      // Migrate to new format
+      const value = storage.getItem(key); // This will handle the old format
+      storage.setItem(key, value, ttlMinutes); // This will store in new format
+      logger.debug(`Migrated storage item: ${key}`);
+    } catch (error) {
+      logger.error('Error migrating localStorage item:', error);
+    }
+  },
+
+  // Clear all app-specific items
   clear: () => {
     try {
       const keys = Object.keys(localStorage);
@@ -130,6 +167,7 @@ const storage = {
           localStorage.removeItem(key);
         }
       });
+      logger.debug('Cleared all TodoFlow localStorage items');
     } catch (error) {
       logger.error('Error clearing localStorage:', error);
     }

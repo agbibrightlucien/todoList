@@ -9,8 +9,37 @@ export const ThemeProvider = ({ children }) => {
 
   // Initialize theme from storage or system preference
   useEffect(() => {
-    const savedTheme = storage.getItem('theme') || localStorage.getItem(config.THEME_STORAGE_KEY);
-    const savedMode = storage.getItem('dark_mode') || localStorage.getItem(config.DARK_MODE_STORAGE_KEY);
+    // One-time cleanup for problematic old storage values
+    const migrationKey = 'storage_migration_v1';
+    if (!localStorage.getItem(migrationKey)) {
+      // Remove old format items that might cause JSON parsing errors
+      ['theme', 'dark_mode', 'todoflow_theme', 'todoflow_dark_mode'].forEach(key => {
+        const value = localStorage.getItem(key);
+        if (value && !value.startsWith('{"')) {
+          logger.debug(`Removing old format storage: ${key} = ${value}`);
+          localStorage.removeItem(key);
+        }
+      });
+      localStorage.setItem(migrationKey, 'completed');
+    }
+    
+    // Try to get from new storage first, then fallback to old storage keys
+    let savedTheme = storage.getItem('theme');
+    if (!savedTheme) {
+      // Check old storage locations
+      savedTheme = localStorage.getItem(config.THEME_STORAGE_KEY) || 
+                   localStorage.getItem('theme') || 
+                   localStorage.getItem('todoflow_theme');
+    }
+    
+    let savedMode = storage.getItem('dark_mode');
+    if (savedMode === null) {
+      // Check old storage locations
+      const oldMode = localStorage.getItem(config.DARK_MODE_STORAGE_KEY) || 
+                      localStorage.getItem('dark_mode') || 
+                      localStorage.getItem('todoflow_dark_mode');
+      savedMode = oldMode === 'true' || oldMode === true;
+    }
     
     if (savedTheme && themes[savedTheme]) {
       setCurrentTheme(savedTheme);
