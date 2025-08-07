@@ -5,10 +5,14 @@ const nodemailer = require('nodemailer');
 const router = express.Router();
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { config } = require('../config/environment');
 
 // Generate JWT token
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  if (!config.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined in environment variables');
+  }
+  return jwt.sign({ userId }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRES_IN });
 };
 
 // Register user
@@ -75,6 +79,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Update last login time
+    await user.updateLastLogin();
+
     // Generate token
     const token = generateToken(user._id);
 
@@ -84,7 +91,8 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        lastLogin: user.lastLogin
       }
     });
   } catch (error) {
@@ -127,23 +135,14 @@ router.post('/forgot-password', async (req, res) => {
     const resetToken = user.generatePasswordResetToken();
     await user.save();
 
-    // Create reset URL
-    const resetURL = `${req.protocol}://${req.get('host')}/api/auth/reset-password/${resetToken}`;
+    // Create reset URL - use frontend URL for better UX
+    const resetURL = `${config.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    // Email configuration (you'll need to set up your email service)
-    const transporter = nodemailer.createTransport({
-      // Configure your email service here
-      // For development, you can use ethereal email or mailtrap
-      host: process.env.EMAIL_HOST || 'smtp.ethereal.email',
-      port: process.env.EMAIL_PORT || 587,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+    // Create email transporter using environment configuration
+    const transporter = nodemailer.createTransporter(config.EMAIL);
 
     const message = `
-      You are receiving this email because you (or someone else) has requested a password reset for your account.
+      You are receiving this email because you (or someone else) has requested a password reset for your TodoFlow account.
       
       Please click on the following link to reset your password:
       ${resetURL}
@@ -151,24 +150,52 @@ router.post('/forgot-password', async (req, res) => {
       If you did not request this, please ignore this email and your password will remain unchanged.
       
       This link will expire in 10 minutes.
+      
+      Best regards,
+      TodoFlow Team
+    `;
+
+    const htmlMessage = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Password Reset Request</h2>
+        <p>You are receiving this email because you (or someone else) has requested a password reset for your <strong>TodoFlow</strong> account.</p>
+        
+        <p>Please click on the following button to reset your password:</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${resetURL}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+        </div>
+        
+        <p>Or copy and paste this link into your browser:</p>
+        <p style="word-break: break-all; color: #007bff;">${resetURL}</p>
+        
+        <p style="color: #666; font-size: 14px;">
+          If you did not request this, please ignore this email and your password will remain unchanged.<br>
+          This link will expire in 10 minutes.
+        </p>
+        
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        <p style="color: #999; font-size: 12px;">Best regards,<br>TodoFlow Team</p>
+      </div>
     `;
 
     try {
       await transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@todoapp.com',
+        from: config.EMAIL.FROM,
         to: user.email,
-        subject: 'Password Reset Request',
-        text: message
+        subject: 'TodoFlow - Password Reset Request',
+        text: message,
+        html: htmlMessage
       });
 
-      res.json({ message: 'Password reset email sent' });
+      res.json({ message: 'Password reset email sent successfully' });
     } catch (emailError) {
       console.error('Email send error:', emailError);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       await user.save();
       
-      res.status(500).json({ message: 'Email could not be sent' });
+      res.status(500).json({ message: 'Email could not be sent. Please try again later.' });
     }
   } catch (error) {
     console.error('Forgot password error:', error);
@@ -189,13 +216,8 @@ router.put('/reset-password/:token', async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters long' });
     }
 
-    // Hash the token from URL
-    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-
-    const user = await User.findOne({
-      resetPasswordToken,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
+    // Find user by reset token using the static method
+    const user = await User.findByResetToken(req.params.token);
 
     if (!user) {
       return res.status(400).json({ message: 'Token is invalid or has expired' });
