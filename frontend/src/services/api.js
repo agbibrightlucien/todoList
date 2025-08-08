@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { config, logger, storage } from '../config/environment';
+import { getErrorMessage, logError, showDevError } from '../utils/errorHandling.js';
 
 const api = axios.create({
   baseURL: config.API_BASE_URL,
@@ -54,8 +55,9 @@ export const todoAPI = {
       const response = await api.get('/todos');
       return response.data;
     } catch (error) {
-      console.error('Error fetching todos:', error);
-      throw error;
+      logError('Get Todos', error);
+      showDevError('Get Todos', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -65,8 +67,9 @@ export const todoAPI = {
       const response = await api.get(`/todos/${id}`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching todo:', error);
-      throw error;
+      logError('Get Todo', error, { id });
+      showDevError('Get Todo', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -76,8 +79,9 @@ export const todoAPI = {
       const response = await api.post('/todos', todoData);
       return response.data;
     } catch (error) {
-      console.error('Error creating todo:', error);
-      throw error;
+      logError('Create Todo', error, { title: todoData.title });
+      showDevError('Create Todo', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -181,8 +185,9 @@ export const authAPI = {
       const response = await api.post('/auth/register', userData);
       return response.data;
     } catch (error) {
-      console.error('Error registering user:', error);
-      throw error;
+      logError('Registration', error, { userData: { email: userData.email, name: userData.name } });
+      showDevError('Registration', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -192,8 +197,9 @@ export const authAPI = {
       const response = await api.post('/auth/login', credentials);
       return response.data;
     } catch (error) {
-      console.error('Error logging in:', error);
-      throw error;
+      logError('Login', error, { email: credentials.email });
+      showDevError('Login', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -203,8 +209,9 @@ export const authAPI = {
       const response = await api.get('/auth/me');
       return response.data;
     } catch (error) {
-      console.error('Error fetching user info:', error);
-      throw error;
+      logError('Get User Info', error);
+      showDevError('Get User Info', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -214,8 +221,9 @@ export const authAPI = {
       const response = await api.post('/auth/forgot-password', { email });
       return response.data;
     } catch (error) {
-      console.error('Error requesting password reset:', error);
-      throw error;
+      logError('Forgot Password', error, { email });
+      showDevError('Forgot Password', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 
@@ -225,8 +233,9 @@ export const authAPI = {
       const response = await api.put(`/auth/reset-password/${token}`, { password });
       return response.data;
     } catch (error) {
-      console.error('Error resetting password:', error);
-      throw error;
+      logError('Reset Password', error);
+      showDevError('Reset Password', error);
+      throw new Error(getErrorMessage(error));
     }
   },
 };
