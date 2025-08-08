@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
 import { authAPI } from '../services/api';
 import { config, logger, storage } from '../config/environment';
+import { getSuccessMessage } from '../utils/errorHandling';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -57,10 +58,17 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem(config.USER_STORAGE_KEY, JSON.stringify(data.user));
 
       logger.log('Login successful for user:', data.user.email);
-      return { success: true, user: data.user };
+      return { 
+        success: true, 
+        user: data.user,
+        message: getSuccessMessage('login')
+      };
     } catch (error) {
-      logger.error('Login error:', error);
-      return { success: false, error: error.message };
+      logger.error('Login error:', error.message);
+      return { 
+        success: false, 
+        error: error.message 
+      };
     }
   };
 
@@ -79,10 +87,17 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem(config.USER_STORAGE_KEY, JSON.stringify(data.user));
 
       logger.log('Registration successful for user:', data.user.email);
-      return { success: true, user: data.user };
+      return { 
+        success: true, 
+        user: data.user,
+        message: getSuccessMessage('register')
+      };
     } catch (error) {
-      logger.error('Registration error:', error);
-      return { success: false, error: error.message };
+      logger.error('Registration error:', error.message);
+      return { 
+        success: false, 
+        error: error.message 
+      };
     }
   };
 
@@ -105,10 +120,16 @@ export const AuthProvider = ({ children }) => {
       logger.debug('Requesting password reset for:', email);
       const data = await authAPI.forgotPassword(email);
       logger.log('Password reset email sent successfully');
-      return { success: true, message: data.message };
+      return { 
+        success: true, 
+        message: data.message || getSuccessMessage('passwordReset')
+      };
     } catch (error) {
-      logger.error('Forgot password error:', error);
-      return { success: false, error: error.message };
+      logger.error('Forgot password error:', error.message);
+      return { 
+        success: false, 
+        error: error.message 
+      };
     }
   };
 
