@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, User, Palette } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
+import { useToast } from '../hooks/useToast';
+import ToastContainer from './Toast';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,6 +21,7 @@ const Auth = () => {
   const [message, setMessage] = useState('');
 
   const { login, register, forgotPassword } = useAuth();
+  const toast = useToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -77,10 +80,12 @@ const Auth = () => {
       setLoading(false);
 
       if (result.success) {
-        setMessage('Password reset email sent! Check your inbox.');
+        toast.success(result.message || 'Password reset email sent! Check your inbox.');
         setShowForgotPassword(false);
+        setMessage('');
       } else {
-        setMessage(result.error);
+        toast.error(result.error);
+        setMessage('');
       }
       return;
     }
@@ -88,6 +93,7 @@ const Auth = () => {
     if (!validateForm()) return;
 
     setLoading(true);
+    setMessage(''); // Clear any previous messages
 
     try {
       let result;
@@ -97,12 +103,15 @@ const Auth = () => {
         result = await register(formData.name, formData.email, formData.password);
       }
 
-      if (!result.success) {
-        setMessage(result.error);
+      if (result.success) {
+        toast.success(result.message);
+        resetForm();
+      } else {
+        toast.error(result.error);
       }
     } catch (err) {
       console.error('Authentication error:', err);
-      setMessage('An unexpected error occurred');
+      toast.error('An unexpected error occurred. Please try again.');
     }
 
     setLoading(false);
@@ -326,6 +335,9 @@ const Auth = () => {
           </div>
         </div>
       </div>
+      
+      {/* Toast Container */}
+      <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
     </div>
   );
 };
