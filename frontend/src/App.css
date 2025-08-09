@@ -325,11 +325,74 @@ body {
   background: white;
 }
 
+/* Input with left icon styles */
+.input-with-icon {
+  padding-left: 2.75rem; /* 44px - consistent spacing for icon */
+}
+
+.input-with-icon-right {
+  padding-right: 2.75rem; /* 44px - consistent spacing for right icon */
+}
+
+/* Input with both left and right icons */
+.input-with-icon.input-with-icon-right {
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem; /* 20px */
+  height: 1.25rem; /* 20px */
+  color: var(--gray-400);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.input-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.input-icon-left {
+  left: 0.75rem; /* 12px - centers icon in left padding */
+}
+
+.input-icon-right {
+  right: 0.75rem; /* 12px - centers icon in right padding */
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Hover effects for interactive icons */
+.input-icon-right:hover {
+  color: var(--gray-600);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .input-icon {
+  color: var(--gray-500);
+}
+
+[data-theme="dark"] .input-icon-right:hover {
+  color: var(--gray-400);
+}
+
 .input:focus {
   outline: none;
   border-color: var(--primary-500);
   box-shadow: 0 0 0 3px var(--primary-100);
   transform: scale(1.01);
+}
+
+/* Enhanced focus state for inputs with icons */
+.relative:focus-within .input-icon {
+  color: var(--primary-500);
 }
 
 .input:disabled {
@@ -1091,6 +1154,17 @@ body {
   
   .text-3xl {
     font-size: 1.5rem;
+  }
+
+  /* Improve touch targets for mobile */
+  .input-icon-right {
+    width: 2rem;
+    height: 2rem;
+    right: 0.5rem;
+  }
+
+  .input-with-icon-right {
+    padding-right: 3rem;
   }
 }
 
