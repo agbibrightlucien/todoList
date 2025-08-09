@@ -321,14 +321,14 @@ function TodoApp() {
               </div>
 
               <div className="relative">
+                <Target className="input-icon input-icon-left" />
                 <input
                   type="text"
                   placeholder="Search your tasks..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input w-full pl-12"
+                  className="input input-with-icon w-full"
                 />
-                <Target className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
             </div>
           </div>
