@@ -197,13 +197,13 @@ const Auth = () => {
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <User className="input-icon input-icon-left" />
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`input pl-12 ${
+                    className={`input input-with-icon ${
                       errors.name ? 'input-error' : ''
                     }`}
                     placeholder="Enter your full name"
@@ -218,13 +218,13 @@ const Auth = () => {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Mail className="input-icon input-icon-left" />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`input pl-12 ${
+                  className={`input input-with-icon ${
                     errors.email ? 'input-error' : ''
                   }`}
                   placeholder="Enter your email"
@@ -240,13 +240,13 @@ const Auth = () => {
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Lock className="input-icon input-icon-left" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className={`input pl-12 pr-12 ${
+                      className={`input input-with-icon input-with-icon-right ${
                         errors.password ? 'input-error' : ''
                       }`}
                       placeholder="Enter your password"
@@ -254,7 +254,7 @@ const Auth = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-all"
+                      className="input-icon input-icon-right hover:text-gray-600 transition-all"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -268,13 +268,13 @@ const Auth = () => {
                       Confirm Password
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Lock className="input-icon input-icon-left" />
                       <input
                         type={showPassword ? 'text' : 'password'}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
-                        className={`input pl-12 ${
+                        className={`input input-with-icon ${
                           errors.confirmPassword ? 'input-error' : ''
                         }`}
                         placeholder="Confirm your password"
