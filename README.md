@@ -1,14 +1,4 @@
 
-## 📱 Features in Detail
-
-
-### Todo Management
-- **Add todos** with title, description, priority, due date, and category
-- **Edit todos** by clicking the edit icon
-- **Delete todos** with confirmation
-- **Toggle completion** by clicking the checkbox
-- **Add subtasks** to any todo (checklist style)
-- **Bulk complete/delete subtasks**
 
 
 ### Filtering & Search
