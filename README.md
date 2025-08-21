@@ -1,19 +1,4 @@
 
-   npm install
-
-   ```
-5. Start the backend server:
-   ```bash
-   # Development mode (auto-restart)
-   npm run dev
-   # Production mode
-   npm start
-   ```
-Backend runs on: `http://localhost:5000`
-
-
-### Frontend Setup
-
 1. Navigate to frontend directory:
    ```bash
    cd frontend
