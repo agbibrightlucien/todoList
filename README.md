@@ -1,10 +1,4 @@
 
-## 🚦 Getting Started
-
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local installation or MongoDB Atlas)
-
 
 ### Backend Setup
 
