@@ -1,24 +1,6 @@
 
 
 
-
-## 🔌 API Endpoints (Key)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET    | `/api/todos` | Get all todos |
-| GET    | `/api/todos/:id` | Get specific todo |
-| POST   | `/api/todos` | Create new todo |
-| PUT    | `/api/todos/:id` | Update todo |
-| DELETE | `/api/todos/:id` | Delete todo |
-| PATCH  | `/api/todos/:id/toggle` | Toggle completion |
-| POST   | `/api/todos/:id/subtasks` | Add subtask |
-| PATCH  | `/api/todos/:id/subtasks/:subtaskId/toggle` | Toggle subtask |
-| PUT    | `/api/todos/:id/subtasks/:subtaskId` | Update subtask |
-| DELETE | `/api/todos/:id/subtasks/:subtaskId` | Delete subtask |
-| PATCH  | `/api/todos/:id/subtasks/bulk` | Bulk subtask ops |
-
-
 ## 🎯 Usage
 
 1. **Start both servers** - Backend on port 5000, Frontend on port 5173
