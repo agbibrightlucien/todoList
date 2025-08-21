@@ -1,19 +1,4 @@
 
-
-
-## 🎯 Usage
-
-1. **Start both servers** - Backend on port 5000, Frontend on port 5173
-2. **Open your browser** - Navigate to `http://localhost:5173`
-3. **Login or register** - Secure authentication required
-4. **Add todos** - Click "Add New Todo" to create tasks
-5. **Manage todos** - Edit, delete, complete, or add subtasks
-6. **Organize** - Use categories, priorities, and due dates
-7. **Subtasks** - Expand a todo to add/check subtasks, see progress bar
-8. **Bulk subtask actions** - Select multiple subtasks to complete/delete
-9. **Filter & search** - Use the search bar and filters to organize
-10. **Switch themes** - Click the palette icon in the header for dark mode & color themes
-
 ## 📱 Features in Detail
 
 
