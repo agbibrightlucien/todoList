@@ -1,17 +1,5 @@
 
-1. Navigate to frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-Frontend runs on: `http://localhost:5173`
+
 
 
 ## 🔌 API Endpoints (Key)
