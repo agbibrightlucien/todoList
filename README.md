@@ -1,22 +1,6 @@
 
 
-       # Node.js + Express API
-│   ├── models/        # MongoDB schemas (with subtasks, categories)
-│   ├── routes/        # API routes (todos, subtasks, auth)
-│   ├── server.js      # Main server file
-│   └── package.json
-└── frontend/          # React + Vite app
-    ├── src/
-    │   ├── components/    # React components (TodoApp, Subtasks, ThemeSettings, etc)
-    │   ├── contexts/      # Theme & Auth context providers
-    │   ├── hooks/         # Custom hooks (useTheme, useAuth)
-    │   ├── constants/     # Theme definitions
-    │   ├── services/      # API service
-    │   └── AppNew.jsx     # Main app entry
-    └── package.json
-```
 
-## 🛠️ Tech Stack
 
 ### Backend
 - **Node.js** - Runtime environment
