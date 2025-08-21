@@ -1,10 +1,4 @@
 
-# TodoFlow – Modern Todo List Application
-
-A full-stack, professional-grade todo list app with React + Vite frontend and Node.js + Express + MongoDB backend. Features a beautiful, themeable UI, subtasks, categories, and more.
-
-
-## 🚀 Features
 
 - ✅ Create, read, update, and delete todos
 - ✅ Mark todos as completed/incomplete
