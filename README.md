@@ -1,13 +1,4 @@
 
-
-### Backend Setup
-
-1. Navigate to backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
    npm install
    ```
 3. Set up environment variables:
