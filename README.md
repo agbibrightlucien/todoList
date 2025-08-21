@@ -1,15 +1,6 @@
 
 
 
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM for MongoDB
-- **CORS** - Cross-origin resource sharing
-
-
 ### Frontend
 - **React 18** - UI library
 - **Vite** - Build tool and dev server
