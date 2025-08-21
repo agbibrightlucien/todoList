@@ -1,23 +1,6 @@
 
 
-- ✅ Create, read, update, and delete todos
-- ✅ Mark todos as completed/incomplete
-- ✅ Set priority levels (low, medium, high)
-- ✅ Set due dates with overdue indicators
-- ✅ Categories & color-coded badges
-- ✅ Subtasks/checklists with progress tracking & bulk actions
-- ✅ Search and filter todos (by status, priority, category)
-- ✅ Responsive, modern UI with custom design system
-- ✅ Dark mode & multiple color themes (blue, green, purple, sunset)
-- ✅ User preference persistence & system theme detection
-- ✅ Real-time statistics dashboard
-
-
-## 📁 Project Structure
-
-```
-todoList/
-├── backend/           # Node.js + Express API
+       # Node.js + Express API
 │   ├── models/        # MongoDB schemas (with subtasks, categories)
 │   ├── routes/        # API routes (todos, subtasks, auth)
 │   ├── server.js      # Main server file
