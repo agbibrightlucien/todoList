@@ -1,12 +1,6 @@
 
    npm install
-   ```
-3. Set up environment variables:
-   - Update `.env` file with your MongoDB connection string
-   - Default: `mongodb://localhost:27017/todolist`
-4. Start MongoDB (if using local):
-   ```bash
-   mongod
+
    ```
 5. Start the backend server:
    ```bash
