@@ -1,4 +1,152 @@
 
+# TodoFlow – Modern Todo List Application
+
+A full-stack, professional-grade todo list app with React + Vite frontend and Node.js + Express + MongoDB backend. Features a beautiful, themeable UI, subtasks, categories, and more.
+
+
+## 🚀 Features
+
+- ✅ Create, read, update, and delete todos
+- ✅ Mark todos as completed/incomplete
+- ✅ Set priority levels (low, medium, high)
+- ✅ Set due dates with overdue indicators
+- ✅ Categories & color-coded badges
+- ✅ Subtasks/checklists with progress tracking & bulk actions
+- ✅ Search and filter todos (by status, priority, category)
+- ✅ Responsive, modern UI with custom design system
+- ✅ Dark mode & multiple color themes (blue, green, purple, sunset)
+- ✅ User preference persistence & system theme detection
+- ✅ Real-time statistics dashboard
+
+
+## 📁 Project Structure
+
+```
+todoList/
+├── backend/           # Node.js + Express API
+│   ├── models/        # MongoDB schemas (with subtasks, categories)
+│   ├── routes/        # API routes (todos, subtasks, auth)
+│   ├── server.js      # Main server file
+│   └── package.json
+└── frontend/          # React + Vite app
+    ├── src/
+    │   ├── components/    # React components (TodoApp, Subtasks, ThemeSettings, etc)
+    │   ├── contexts/      # Theme & Auth context providers
+    │   ├── hooks/         # Custom hooks (useTheme, useAuth)
+    │   ├── constants/     # Theme definitions
+    │   ├── services/      # API service
+    │   └── AppNew.jsx     # Main app entry
+    └── package.json
+```
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM for MongoDB
+- **CORS** - Cross-origin resource sharing
+
+
+### Frontend
+- **React 18** - UI library
+- **Vite** - Build tool and dev server
+- **Custom CSS Design System** - Modern, themeable, accessible
+- **Axios** - HTTP client
+- **Lucide React** - Icon library
+
+## 🚦 Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB (local installation or MongoDB Atlas)
+
+
+### Backend Setup
+
+1. Navigate to backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   - Update `.env` file with your MongoDB connection string
+   - Default: `mongodb://localhost:27017/todolist`
+4. Start MongoDB (if using local):
+   ```bash
+   mongod
+   ```
+5. Start the backend server:
+   ```bash
+   # Development mode (auto-restart)
+   npm run dev
+   # Production mode
+   npm start
+   ```
+Backend runs on: `http://localhost:5000`
+
+
+### Frontend Setup
+
+1. Navigate to frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+Frontend runs on: `http://localhost:5173`
+
+
+## 🔌 API Endpoints (Key)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/api/todos` | Get all todos |
+| GET    | `/api/todos/:id` | Get specific todo |
+| POST   | `/api/todos` | Create new todo |
+| PUT    | `/api/todos/:id` | Update todo |
+| DELETE | `/api/todos/:id` | Delete todo |
+| PATCH  | `/api/todos/:id/toggle` | Toggle completion |
+| POST   | `/api/todos/:id/subtasks` | Add subtask |
+| PATCH  | `/api/todos/:id/subtasks/:subtaskId/toggle` | Toggle subtask |
+| PUT    | `/api/todos/:id/subtasks/:subtaskId` | Update subtask |
+| DELETE | `/api/todos/:id/subtasks/:subtaskId` | Delete subtask |
+| PATCH  | `/api/todos/:id/subtasks/bulk` | Bulk subtask ops |
+
+
+## 🎯 Usage
+
+1. **Start both servers** - Backend on port 5000, Frontend on port 5173
+2. **Open your browser** - Navigate to `http://localhost:5173`
+3. **Login or register** - Secure authentication required
+4. **Add todos** - Click "Add New Todo" to create tasks
+5. **Manage todos** - Edit, delete, complete, or add subtasks
+6. **Organize** - Use categories, priorities, and due dates
+7. **Subtasks** - Expand a todo to add/check subtasks, see progress bar
+8. **Bulk subtask actions** - Select multiple subtasks to complete/delete
+9. **Filter & search** - Use the search bar and filters to organize
+10. **Switch themes** - Click the palette icon in the header for dark mode & color themes
+
+## 📱 Features in Detail
+
+
+### Todo Management
+- **Add todos** with title, description, priority, due date, and category
+- **Edit todos** by clicking the edit icon
+- **Delete todos** with confirmation
+- **Toggle completion** by clicking the checkbox
+- **Add subtasks** to any todo (checklist style)
+- **Bulk complete/delete subtasks**
 
 
 ### Filtering & Search
