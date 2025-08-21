@@ -1,13 +1,4 @@
 
-
-
-### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **Custom CSS Design System** - Modern, themeable, accessible
-- **Axios** - HTTP client
-- **Lucide React** - Icon library
-
 ## 🚦 Getting Started
 
 ### Prerequisites
